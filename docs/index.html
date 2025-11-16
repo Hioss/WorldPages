@@ -1,49 +1,43 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<title>今日新闻</title>
-<link rel="stylesheet" href="style.css">
-<script defer src="script.js"></script>
+  <meta charset="UTF-8">
+  <title>多源热点聚合 - WorldPages</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <header>
-  <h1>今日新闻（自动更新）</h1>
-  <p>来源：爬虫程序自动抓取，每天早上 6 点更新</p>
+  <h1>多源热点聚合</h1>
+  <p>BBC 中文网 · 百度热搜 · 头条热榜<br>每天早上 6 点自动更新 · 最近 10 天可切换查看</p>
 </header>
 
-<div class="container" id="news-container">
-  <p class="loading">加载中...</p>
-</div>
+<main class="container">
+  <section class="controls">
+    <label for="date-select">选择日期：</label>
+    <select id="date-select"></select>
+    <span id="status"></span>
+  </section>
+
+  <section class="columns">
+    <div class="column">
+      <h2>BBC 中文网热点</h2>
+      <div id="bbc-list" class="card-list"></div>
+    </div>
+    <div class="column">
+      <h2>百度热搜</h2>
+      <div id="baidu-list" class="card-list"></div>
+    </div>
+    <div class="column">
+      <h2>头条热榜</h2>
+      <div id="toutiao-list" class="card-list"></div>
+    </div>
+  </section>
+</main>
 
 <footer>
-  <p>© 2025 Hioss · WorldPages</p>
+  <p>© 2025 Hioss · WorldPages · GitHub Pages 自动部署</p>
 </footer>
 
-<script>
-fetch("result.json?_=" + Date.now())
-  .then(r => r.json())
-  .then(list => {
-    const box = document.getElementById("news-container");
-    box.innerHTML = "";
-
-    list.forEach(item => {
-      const div = document.createElement("div");
-      div.className = "card";
-      div.innerHTML = `
-        <h2><a href="${item.link}" target="_blank">${item.title}</a></h2>
-        <p class="time">${item.time || "未知时间"}</p>
-        <p>${item.desc || ""}</p>
-      `;
-      box.appendChild(div);
-    });
-  })
-  .catch(err => {
-    document.getElementById("news-container").innerHTML =
-      "<p>加载失败，请稍后刷新。</p>";
-  });
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
