@@ -1,5 +1,6 @@
 # WorldPages 目录结构
 
+```
 WorldPages/
 ├─ pom.xml
 ├─ src/
@@ -19,3 +20,4 @@ WorldPages/
 └─ .github/
    └─ workflows/
       └─ run.yml
+```
