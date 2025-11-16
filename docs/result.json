@@ -1,0 +1,14 @@
+[
+  {
+    "title": "示例新闻 1：GitHub Pages 已成功运行",
+    "link": "https://example.com/news1",
+    "time": "2025-11-17 06:00:00",
+    "desc": "这是一个示例新闻，用于测试 GitHub Pages 是否能成功显示 JSON 内容。"
+  },
+  {
+    "title": "示例新闻 2：这是另一条测试新闻",
+    "link": "https://example.com/news2",
+    "time": "2025-11-17 06:00:00",
+    "desc": "你可以将这些内容替换成你的爬虫抓到的真实标题、链接和时间。"
+  }
+]
