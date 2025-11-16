@@ -1,23 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>新闻爬虫结果</title>
+<meta charset="UTF-8">
+<title>Hello World</title>
 </head>
 <body>
-  <h1>今日新闻</h1>
-  <ul id="list"></ul>
-  <script>
-    fetch("result.json")
-      .then(r => r.json())
-      .then(data => {
-        const ul = document.getElementById("list");
-        data.forEach(item => {
-          const li = document.createElement("li");
-          li.innerHTML = `<a href="${item.link}" target="_blank">${item.title}</a>`;
-          ul.appendChild(li);
-        });
-      });
-  </script>
+<h1>GitHub Pages 正常运行！</h1>
+<p>这是一个最基础的网页。</p>
 </body>
 </html>
