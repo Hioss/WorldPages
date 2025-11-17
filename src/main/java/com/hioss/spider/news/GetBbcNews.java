@@ -2,6 +2,8 @@ package com.hioss.spider.news;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hioss.spider.dto.HotItem;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
@@ -20,6 +22,9 @@ import java.util.List;
  * 
  */
 public class GetBbcNews  implements PageProcessor {
+
+    //爬虫结果
+    private final List<HotItem> list = new ArrayList<>();
 
     //模拟浏览器的反爬虫设置
     private Site site = Site.me()
@@ -84,13 +89,11 @@ public class GetBbcNews  implements PageProcessor {
         //判断是否取得了网页源代码
         String html = page.getRawText();
         if (html == null || html.trim().isEmpty()) {
-            System.out.println("⚠️ 没有取得网页源代码！");
             return;
         }
         // 提取 JSON 内容
         int pos = html.indexOf("\"status\":200");
         if (pos == -1) {
-            System.out.println("BBC JSON not found");
             return;
         }
 
@@ -108,16 +111,19 @@ public class GetBbcNews  implements PageProcessor {
             // 找到所有 items
             List<JsonNode> itemsList = findItems(arrayNode);
 
-            //显示编号用的变量
-            int i = 1;
-
             //输出热门内容的标题和链接
             for (JsonNode items : itemsList) {
                 for (JsonNode item : items) {
                     if (item.has("title")) {
-                        System.out.println(i + "." + item.get("title").asText() + " "  + item.get("href").asText());
+                        String title = item.get("title").asText();
+                        String link = item.get("href").asText();
+
+                        HotItem dto = new HotItem();
+                        dto.setTitle(title);
+                        dto.setLink(link);
+                        
+                        list.add(dto);
                     }
-                    i++;
                 }
             }
         } catch (Exception e) {
@@ -130,16 +136,15 @@ public class GetBbcNews  implements PageProcessor {
         return site;
     }
 
-    public static void main(String[] args) {
-        try {
-            GetBbcNews myProcessor = new GetBbcNews();
+    /**
+     * 提供给外部调用的方法
+     */
+    public List<HotItem> start() {
+        Spider.create(this)
+                .addUrl("https://www.bbc.com/zhongwen/simp")
+                .thread(1)
+                .run();
 
-            Spider.create(myProcessor)
-                    .addUrl("https://www.bbc.com/zhongwen/simp")
-                    .thread(1)
-                    .run();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        return this.list;
     }
 }
