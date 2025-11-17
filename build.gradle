@@ -12,11 +12,11 @@ repositories {
 
 dependencies {
     // WebMagic 爬虫
-    implementation 'us.codecraft:webmagic-core:1.0.3'
-    implementation 'us.codecraft:webmagic-extension:1.0.3'
+    implementation 'us.codecraft:webmagic-core:0.7.5'
+    implementation 'us.codecraft:webmagic-extension:0.7.5'
 
     // Jackson
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.1'
 
     // 简单日志实现
     implementation 'org.slf4j:slf4j-simple:2.0.13'

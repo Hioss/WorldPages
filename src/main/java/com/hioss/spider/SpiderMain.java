@@ -2,223 +2,136 @@ package com.hioss.spider;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-public class SpiderMain {
+public class SpiderMain  implements PageProcessor {
 
-    private static final String BBC_URL = "https://www.bbc.com/zhongwen/simp";
-    private static final String BAIDU_API = "https://zj.v.api.aa1.cn/api/baidu-rs/";
-    private static final String TOUTIAO_API = "https://dabenshi.cn/other/api/hot.php?type=toutiaoHot";
+    //模拟浏览器的反爬虫设置
+    private Site site = Site.me()
+            .setCharset("UTF-8")  //设置网页编码
+            .setRetryTimes(2)     //设置请求失败重试次数
+            .setSleepTime(5000)   //设置每次请求的间隔时间（毫秒）
+            .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36");
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    /**
+     * 找到JSON中items层级（网页中唯一的关键字【"items":】）
+     *
+     * @param node 待处理JSON
+     * @return 完整的JSON字符串
+     */
+    public static List<JsonNode> findItems(JsonNode node) {
+        List<JsonNode> result = new ArrayList<>();
 
-    public static void main(String[] args) throws Exception {
-        LocalDate today = LocalDate.now(ZoneId.of("Asia/Tokyo"));
-        String dateStr = today.toString();
+        if (node.has("items")) {
+            result.add(node.get("items"));
+        }
 
-        // --- BBC ---
-        List<HotItem> bbc = fetchBBC();
+        // 遍历所有子节点继续找
+        Iterator<JsonNode> it = node.elements();
+        while (it.hasNext()) {
+            result.addAll(findItems(it.next()));
+        }
 
-        // --- 百度 ---
-        List<HotItem> baidu = fetchApi(BAIDU_API);
-
-        // --- 头条 ---
-        List<HotItem> toutiao = fetchApi(TOUTIAO_API);
-
-        // --- 创建 JSON ----
-        ObjectNode root = MAPPER.createObjectNode();
-        root.put("date", dateStr);
-        root.set("bbc", toArrayNode(bbc));
-        root.set("baidu", toArrayNode(baidu));
-        root.set("toutiao", toArrayNode(toutiao));
-
-        Path dataDir = Paths.get("docs", "data");
-        if (!Files.exists(dataDir)) Files.createDirectories(dataDir);
-
-        Path todayFile = dataDir.resolve("hot-" + dateStr + ".json");
-        MAPPER.writerWithDefaultPrettyPrinter().writeValue(todayFile.toFile(), root);
-
-        // --- 清理旧文件 ---
-        cleanOldFiles(dataDir, 10);
-
-        // --- index.json ---
-        generateIndexJson(dataDir);
+        return result;
     }
 
-    // ===== BBC 中文网 =====
-    private static List<HotItem> fetchBBC() {
-        List<HotItem> list = new ArrayList<>();
+    /**
+     * 找到 JSON 对象的完整结束位置
+     *
+     * @param text 待处理字符串
+     * @param startIndex 开始位置
+     * @return 完整的JSON字符串
+     */
+    private String extractJsonObject(String text, int startIndex) {
+        int braceCount = 0;
+        int endIndex = startIndex;
 
-        PageProcessor processor = new PageProcessor() {
-            Site site = Site.me().setRetryTimes(3).setSleepTime(1000).setCharset("UTF-8");
+        for (int i = startIndex; i < text.length(); i++) {
+            char c = text.charAt(i);
 
-            @Override
-            public void process(Page page) {
-                List<String> titles = page.getHtml()
-                        .css("a:matchesOwn(.*)", "text")
-                        .regex(".*") // 可以后续调优
-                        .all();
+            if (c == '{') braceCount++;
+            else if (c == '}') braceCount--;
 
-                List<String> links = page.getHtml()
-                        .links()
-                        .regex("https://www\\.bbc\\.com/zhongwen/simp/.*")
-                        .all();
-
-                // 一起匹配
-                for (int i = 0; i < Math.min(titles.size(), links.size()); i++) {
-                    String title = titles.get(i).trim();
-                    String link = links.get(i).trim();
-                    if (!title.isBlank() && !link.isBlank()) {
-                        list.add(new HotItem(title, link));
-                    }
-                }
+            if (braceCount == 0 && i > startIndex) {
+                endIndex = i + 1;
+                break;
             }
+        }
 
-            @Override
-            public Site getSite() { return site; }
-        };
-
-        Spider.create(processor).addUrl(BBC_URL).thread(1).run();
-        return list;
+        return text.substring(startIndex, endIndex);
     }
 
-    // ===== API 抓取 =====
-    private static List<HotItem> fetchApi(String url) {
-        List<HotItem> list = new ArrayList<>();
-        HttpClient client = HttpClient.newHttpClient();
+    /**
+     * 主要业务逻辑
+     */
+    @Override
+    public void process(Page page) {
+        //判断是否取得了网页源代码
+        String html = page.getRawText();
+        if (html == null || html.trim().isEmpty()) {
+            System.out.println("⚠️ 没有取得网页源代码！");
+            return;
+        }
+        // 提取 JSON 内容
+        int pos = html.indexOf("\"status\":200");
+        if (pos == -1) {
+            System.out.println("BBC JSON not found");
+            return;
+        }
+
+        //第一个{开始的位置
+        int start = html.lastIndexOf("{", pos);
+
+        //得到完整的JSON
+        String jsonText = extractJsonObject(html, start);
 
         try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .header("User-Agent", "Mozilla/5.0")
-                    .build();
+            // 解析 JSON
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode arrayNode = mapper.readTree(jsonText);
 
-            String body = client.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8)).body();
+            // 找到所有 items
+            List<JsonNode> itemsList = findItems(arrayNode);
 
-            JsonNode root = MAPPER.readTree(body);
-            JsonNode arr = null;
+            //显示编号用的变量
+            int i = 1;
 
-            if (root.isArray()) arr = root;
-            else if (root.has("data") && root.get("data").isArray()) arr = root.get("data");
-            else if (root.has("list") && root.get("list").isArray()) arr = root.get("list");
-
-            if (arr != null) {
-                for (JsonNode item : arr) {
-                    String title = getField(item, "title", "word", "name");
-                    String link = getField(item, "url", "link", "href");
-                    if (title != null && link != null) {
-                        list.add(new HotItem(title, link));
+            //输出热门内容的标题和链接
+            for (JsonNode items : itemsList) {
+                for (JsonNode item : items) {
+                    if (item.has("title")) {
+                        System.out.println(i + "." + item.get("title").asText() + " "  + item.get("href").asText());
                     }
+                    i++;
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return list;
     }
 
-    private static String getField(JsonNode node, String... keys) {
-        for (String k : keys) {
-            if (node.has(k) && !node.get(k).isNull()) {
-                String v = node.get(k).asText();
-                if (!v.isBlank()) return v;
-            }
-        }
-        return null;
+    @Override
+    public Site getSite() {
+        return site;
     }
 
-    private static ArrayNode toArrayNode(List<HotItem> list) {
-        ArrayNode arr = MAPPER.createArrayNode();
-        for (HotItem i : list) {
-            ObjectNode o = MAPPER.createObjectNode();
-            o.put("title", i.title);
-            o.put("link", i.link);
-            arr.add(o);
-        }
-        return arr;
-    }
+    public static void main(String[] args) {
+        try {
+            SpiderMain myProcessor = new SpiderMain();
 
-    // ===== 清理旧文件 =====
-    private static void cleanOldFiles(Path dir, int keepDays) throws IOException {
-        List<Path> files = Files.list(dir)
-                .filter(f -> f.getFileName().toString().startsWith("hot-"))
-                .collect(Collectors.toList());
-
-        List<PathWithDate> list = new ArrayList<>();
-        for (Path p : files) {
-            try {
-                String d = p.getFileName().toString().substring(4, 14);
-                list.add(new PathWithDate(p, LocalDate.parse(d)));
-            } catch (Exception ignored) {}
-        }
-
-        list.sort((a, b) -> b.date.compareTo(a.date));
-
-        for (int i = keepDays; i < list.size(); i++) {
-            Files.deleteIfExists(list.get(i).path);
-        }
-    }
-
-    // ===== index.json =====
-    private static void generateIndexJson(Path dir) throws IOException {
-        List<PathWithDate> list = Files.list(dir)
-                .filter(f -> f.getFileName().toString().startsWith("hot-"))
-                .map(f -> {
-                    try {
-                        String d = f.getFileName().toString().substring(4, 14);
-                        return new PathWithDate(f, LocalDate.parse(d));
-                    } catch (Exception e) {
-                        return null;
-                    }
-                }).filter(Objects::nonNull)
-                .sorted((a, b) -> b.date.compareTo(a.date))
-                .collect(Collectors.toList());
-
-        ArrayNode arr = MAPPER.createArrayNode();
-        for (PathWithDate pw : list) arr.add(pw.date.toString());
-
-        ObjectNode root = MAPPER.createObjectNode();
-        root.set("dates", arr);
-
-        Path indexJson = dir.resolve("index.json");
-        MAPPER.writerWithDefaultPrettyPrinter().writeValue(indexJson.toFile(), root);
-    }
-
-    // ===== 辅助类 =====
-    static class HotItem {
-        public String title;
-        public String link;
-
-        HotItem(String title, String link) {
-            this.title = title;
-            this.link = link;
-        }
-    }
-
-    static class PathWithDate {
-        Path path;
-        LocalDate date;
-
-        PathWithDate(Path path, LocalDate date) {
-            this.path = path;
-            this.date = date;
+            Spider.create(myProcessor)
+                    .addUrl("https://www.bbc.com/zhongwen/simp")
+                    .thread(1)
+                    .run();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
