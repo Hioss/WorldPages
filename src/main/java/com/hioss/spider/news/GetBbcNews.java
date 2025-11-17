@@ -1,4 +1,4 @@
-package com.hioss.spider;
+package com.hioss.spider.news;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,20 +12,14 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * 全球资讯
- *
- * <p>该类通过新闻爬虫从著名网站抓取热点新闻标题与链接，
- * 并将抓取结果以JSON形式写入docs文件夹。
- *
- * <p>程序被定时任务（GitHub Actions每天上午10点执行一次，
- * 用于自动更新热点新闻数据。
+ * BBC中文网 热门内容
  *
  * @author      程春海
  * @version     1.0
  * @since       2025-11-18
  * 
  */
-public class SpiderMain  implements PageProcessor {
+public class GetBbcNews  implements PageProcessor {
 
     //模拟浏览器的反爬虫设置
     private Site site = Site.me()
@@ -138,7 +132,7 @@ public class SpiderMain  implements PageProcessor {
 
     public static void main(String[] args) {
         try {
-            SpiderMain myProcessor = new SpiderMain();
+            GetBbcNews myProcessor = new GetBbcNews();
 
             Spider.create(myProcessor)
                     .addUrl("https://www.bbc.com/zhongwen/simp")
