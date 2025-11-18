@@ -6,7 +6,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hioss.spider.dto.HotItem;
 import com.hioss.spider.dto.PathWithDate;
 import com.hioss.spider.news.GetBbcNews;
-
+import com.hioss.spider.news.GetBaiduNews;
+import com.hioss.spider.news.GetToutiaoNews;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -40,10 +41,18 @@ public class SpiderMain {
         // --- BBC ---
         List<HotItem> bbc = fetchBBC();
 
+        // --- 百度 ---
+        List<HotItem> baidu = fetchBaidu();
+
+        // --- 头条 ---
+        List<HotItem> toutiao = fetchToutiao();
+
         // --- 创建 JSON ----
         ObjectNode root = MAPPER.createObjectNode();
         root.put("date", dateStr);
         root.set("bbc", toArrayNode(bbc));
+        root.set("baidu", toArrayNode(baidu));
+        root.set("toutiao", toArrayNode(toutiao));
 
         Path dataDir = Paths.get("docs", "data");
         if (!Files.exists(dataDir)) Files.createDirectories(dataDir);
@@ -58,11 +67,35 @@ public class SpiderMain {
         generateIndexJson(dataDir);
     }
 
-     // ===== BBC 中文网 =====
+    // ===== BBC 中文网 =====
     private static List<HotItem> fetchBBC() {
         
         // 创建爬虫对象
         GetBbcNews spider = new GetBbcNews();
+
+        // 调用 start() 执行爬虫，并返回结果
+        List<HotItem> result = spider.start();
+        
+        return result;
+    }
+
+    // ===== 百度热搜 =====
+    private static List<HotItem> fetchBaidu() {
+        
+        // 创建爬虫对象
+        GetBaiduNews spider = new GetBaiduNews();
+
+        // 调用 start() 执行爬虫，并返回结果
+        List<HotItem> result = spider.start();
+        
+        return result;
+    }
+
+    // ===== 头条热榜 =====
+    private static List<HotItem> fetchToutiao() {
+        
+        // 创建爬虫对象
+        GetToutiaoNews spider = new GetToutiaoNews();
 
         // 调用 start() 执行爬虫，并返回结果
         List<HotItem> result = spider.start();
