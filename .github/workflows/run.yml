@@ -1,0 +1,42 @@
+name: run-hot-spider-gradle
+
+on:
+  schedule:
+    - cron: "0 21 * * *"   # 日本时间 06:00
+  workflow_dispatch:
+
+jobs:
+  run-spider:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+
+      - name: Run spider
+        run: ./gradlew run
+
+      - name: Commit generated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/*.json
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "update hot data"
+            git push
+          fi
