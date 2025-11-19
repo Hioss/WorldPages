@@ -1,5 +1,8 @@
 name: run-hot-spider-gradle
 
+permissions:
+  contents: write
+  
 on:
   schedule:
     - cron: "0 21 * * *"   # 日本时间 06:00
