@@ -45,12 +45,12 @@
 <!-- 监听 h2 点击事件，添加手机端折叠效果。 -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  const headers = document.querySelectorAll(".card h2");
+  const headers = document.querySelectorAll(".column h2");
 
   headers.forEach(h2 => {
     h2.addEventListener("click", function () {
-      const card = h2.closest(".card");
-      card.classList.toggle("collapsed");
+      const column = h2.closest(".column");
+      column.classList.toggle("collapsed");
     });
   });
 });
