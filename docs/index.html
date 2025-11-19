@@ -2,14 +2,14 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>多源热点聚合 - WorldPages</title>
+  <title>全球资讯 - WorldPages</title>
   <!-- 添加移动端 viewport -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header>
-  <h1>多源热点聚合</h1>
+  <h1>全球资讯</h1>
   <p>BBC 中文网 · 百度热搜 · 头条热榜<br>每天早上 6 点自动更新 · 最近 10 天可切换查看</p>
 </header>
 
@@ -41,5 +41,20 @@
 </footer>
 
 <script src="script.js"></script>
+
+<!-- 监听 h2 点击事件，添加手机端折叠效果。 -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const headers = document.querySelectorAll(".card h2");
+
+  headers.forEach(h2 => {
+    h2.addEventListener("click", function () {
+      const card = h2.closest(".card");
+      card.classList.toggle("collapsed");
+    });
+  });
+});
+</script>
+
 </body>
 </html>
