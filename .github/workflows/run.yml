@@ -5,7 +5,7 @@ permissions:
   
 on:
   schedule:
-    - cron: "0 21 * * *"   # 日本时间 06:00
+    - cron: "0 2 * * *"   # 日本时间 11:00
   workflow_dispatch:
 
 jobs:
