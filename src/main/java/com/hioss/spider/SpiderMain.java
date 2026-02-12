@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * <p>该类通过新闻爬虫从著名网站抓取热点新闻标题与链接，
  * 并将抓取结果以JSON形式写入docs文件夹。
  *
- * <p>程序被定时任务（GitHub Actions每天上午6点执行一次，
+ * <p>程序被定时任务（GitHub Actions每天上午11点执行一次，
  * 用于自动更新热点新闻数据。
  *
  * @author      程春海
@@ -60,7 +60,7 @@ public class SpiderMain {
         Path todayFile = dataDir.resolve("hot-" + dateStr + ".json");
         MAPPER.writerWithDefaultPrettyPrinter().writeValue(todayFile.toFile(), root);
 
-    // --- 清理旧文件 ---
+        // --- 清理旧文件 ---
         cleanOldFiles(dataDir, 10);
 
         // --- index.json ---

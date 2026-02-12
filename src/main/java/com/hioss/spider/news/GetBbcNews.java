@@ -1,7 +1,6 @@
 package com.hioss.spider.news;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hioss.spider.dto.HotItem;
 
 import us.codecraft.webmagic.Page;
@@ -9,29 +8,47 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 /**
  * BBC中文网 热门内容
+ * 说明：改为抓取 RSS（繁体）前 10 条新闻
  *
  * @author      程春海
  * @version     1.0
  * @since       2025-11-18
- * 
+ *
  */
-public class GetBbcNews  implements PageProcessor {
+public class GetBbcNews implements PageProcessor {
 
-    //爬虫结果
+    // 目标：取 10 条
+    private static final int LIMIT = 10;
+
+    // RSS（繁体）
+    private static final String RSS_URL = "https://feeds.bbci.co.uk/zhongwen/trad/rss.xml";
+
+    // 爬虫结果（⚠️ List 格式不变：仍然返回 List<HotItem>）
     private final List<HotItem> list = new ArrayList<>();
 
-    //模拟浏览器的反爬虫设置
+    // 模拟浏览器的反爬虫设置
     private Site site = Site.me()
-            .setCharset("UTF-8")  //设置网页编码
-            .setRetryTimes(2)     //设置请求失败重试次数
-            .setSleepTime(5000)   //设置每次请求的间隔时间（毫秒）
-            .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36");
+            .setCharset("UTF-8")  // 设置网页编码
+            .setRetryTimes(2)     // 设置请求失败重试次数
+            .setSleepTime(1500)   // 设置每次请求的间隔时间（毫秒）
+            .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36")
+            .addHeader("Accept", "application/rss+xml,application/xml;q=0.9,*/*;q=0.8")
+            .addHeader("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8");
 
     /**
      * 找到JSON中items层级（网页中唯一的关键字【"items":】）
@@ -42,14 +59,16 @@ public class GetBbcNews  implements PageProcessor {
     public static List<JsonNode> findItems(JsonNode node) {
         List<JsonNode> result = new ArrayList<>();
 
-        if (node.has("items")) {
+        if (node != null && node.has("items")) {
             result.add(node.get("items"));
         }
 
         // 遍历所有子节点继续找
-        Iterator<JsonNode> it = node.elements();
-        while (it.hasNext()) {
-            result.addAll(findItems(it.next()));
+        if (node != null) {
+            Iterator<JsonNode> it = node.elements();
+            while (it.hasNext()) {
+                result.addAll(findItems(it.next()));
+            }
         }
 
         return result;
@@ -82,53 +101,64 @@ public class GetBbcNews  implements PageProcessor {
     }
 
     /**
-     * 主要业务逻辑
+     * 主要业务逻辑：解析 RSS XML，取前 10 条
      */
     @Override
     public void process(Page page) {
-        //判断是否取得了网页源代码
-        String html = page.getRawText();
-        if (html == null || html.trim().isEmpty()) {
+        String xml = page.getRawText();
+        if (xml == null || xml.trim().isEmpty()) {
             return;
         }
-        // 提取 JSON 内容
-        int pos = html.indexOf("\"status\":200");
-        if (pos == -1) {
-            return;
-        }
-
-        //第一个{开始的位置
-        int start = html.lastIndexOf("{", pos);
-
-        //得到完整的JSON
-        String jsonText = extractJsonObject(html, start);
 
         try {
-            // 解析 JSON
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode arrayNode = mapper.readTree(jsonText);
+            // 安全配置：禁止外部实体（防 XXE）
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            try {
+                dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+                dbf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+                dbf.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            } catch (Exception ignored) {
+                // 某些 JRE/实现不支持特性时忽略
+            }
+            dbf.setXIncludeAware(false);
+            dbf.setExpandEntityReferences(false);
 
-            // 找到所有 items
-            List<JsonNode> itemsList = findItems(arrayNode);
+            DocumentBuilder builder = dbf.newDocumentBuilder();
+            org.w3c.dom.Document doc = builder.parse(new InputSource(new StringReader(xml)));
 
-            //输出热门内容的标题和链接
-            for (JsonNode items : itemsList) {
-                for (JsonNode item : items) {
-                    if (item.has("title")) {
-                        String title = item.get("title").asText();
-                        String link = item.get("href").asText();
+            NodeList items = doc.getElementsByTagName("item");
+            int count = 0;
 
-                        HotItem dto = new HotItem();
-                        dto.setTitle(title);
-                        dto.setLink(link);
-                        
-                        list.add(dto);
-                    }
-                }
+            for (int i = 0; i < items.getLength() && count < LIMIT; i++) {
+                Node n = items.item(i);
+                if (n.getNodeType() != Node.ELEMENT_NODE) continue;
+
+                Element item = (Element) n;
+
+                String title = getText(item, "title");
+                String link = getText(item, "link");
+
+                if (title == null || title.trim().isEmpty()) continue;
+                if (link == null || link.trim().isEmpty()) continue;
+
+                HotItem dto = new HotItem();
+                dto.setTitle(title.trim());
+                dto.setLink(link.trim());
+                list.add(dto);
+
+                count++;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String getText(Element parent, String tagName) {
+        NodeList nl = parent.getElementsByTagName(tagName);
+        if (nl == null || nl.getLength() == 0) return null;
+        Node n = nl.item(0);
+        return n != null ? n.getTextContent() : null;
     }
 
     @Override
@@ -137,11 +167,11 @@ public class GetBbcNews  implements PageProcessor {
     }
 
     /**
-     * 提供给外部调用的方法
+     * 提供给外部调用的方法（⚠️ 返回 List<HotItem> 不变）
      */
     public List<HotItem> start() {
         Spider.create(this)
-                .addUrl("https://www.bbc.com/zhongwen/simp")
+                .addUrl(RSS_URL)
                 .thread(1)
                 .run();
 
