@@ -10,11 +10,14 @@ import com.hioss.spider.news.GetBaiduNews;
 import com.hioss.spider.news.GetToutiaoNews;
 
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * 全球资讯
@@ -55,13 +58,15 @@ public class SpiderMain {
         root.set("今日头条热榜", toArrayNode(toutiao));
 
         Path dataDir = Paths.get("docs", "data");
-        if (!Files.exists(dataDir)) Files.createDirectories(dataDir);
+        if (!Files.exists(dataDir)) {
+            Files.createDirectories(dataDir);
+        }
 
         Path todayFile = dataDir.resolve("NewsPage-" + dateStr + ".json");
         MAPPER.writerWithDefaultPrettyPrinter().writeValue(todayFile.toFile(), root);
 
         // --- 清理旧文件 ---
-        cleanOldFiles(dataDir, 10);
+        cleanOldFiles(dataDir);
 
         // --- date.json ---
         generateDateJson(dataDir);
@@ -69,38 +74,20 @@ public class SpiderMain {
 
     // ===== BBC 中文网 =====
     private static List<HotItem> fetchBBC() {
-
-        // 创建爬虫对象
         GetBbcNews spider = new GetBbcNews();
-
-        // 调用 start() 执行爬虫，并返回结果
-        List<HotItem> result = spider.start();
-
-        return result;
+        return spider.start();
     }
 
     // ===== 百度热搜 =====
     private static List<HotItem> fetchBaidu() {
-
-        // 创建爬虫对象
         GetBaiduNews spider = new GetBaiduNews();
-
-        // 调用 start() 执行爬虫，并返回结果
-        List<HotItem> result = spider.start();
-
-        return result;
+        return spider.start();
     }
 
     // ===== 头条热榜 =====
     private static List<HotItem> fetchToutiao() {
-
-        // 创建爬虫对象
         GetToutiaoNews spider = new GetToutiaoNews();
-
-        // 调用 start() 执行爬虫，并返回结果
-        List<HotItem> result = spider.start();
-
-        return result;
+        return spider.start();
     }
 
     private static ArrayNode toArrayNode(List<HotItem> list) {
@@ -115,43 +102,54 @@ public class SpiderMain {
     }
 
     // ===== 清理旧文件 =====
-    private static void cleanOldFiles(Path dir, int keepDays) throws IOException {
-        List<Path> files = Files.list(dir)
-                .filter(f -> f.getFileName().toString().startsWith("NewsPage-"))
-                .collect(Collectors.toList());
+    private static void cleanOldFiles(Path dir) throws IOException {
+        final List<Path> files;
+        try (var stream = Files.list(dir)) {
+            files = stream
+                    .filter(f -> f.getFileName().toString().startsWith("NewsPage-"))
+                    .toList();
+        }
 
         List<PathWithDate> list = new ArrayList<>();
         for (Path p : files) {
             try {
                 String d = p.getFileName().toString().substring(9, 19);
                 list.add(new PathWithDate(p, LocalDate.parse(d)));
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
 
         list.sort((a, b) -> b.getDate().compareTo(a.getDate()));
 
-        for (int i = keepDays; i < list.size(); i++) {
+        // json文件保存10天
+        for (int i = 10; i < list.size(); i++) {
             Files.deleteIfExists(list.get(i).getPath());
         }
     }
 
     // ===== date.json =====
     private static void generateDateJson(Path dir) throws IOException {
-        List<PathWithDate> list = Files.list(dir)
-                .filter(f -> f.getFileName().toString().startsWith("NewsPage-"))
-                .map(f -> {
-                    try {
-                        String d = f.getFileName().toString().substring(9, 19);
-                        return new PathWithDate(f, LocalDate.parse(d));
-                    } catch (Exception e) {
-                        return null;
-                    }
-                }).filter(Objects::nonNull)
-                .sorted((a, b) -> b.getDate().compareTo(a.getDate()))
-                .collect(Collectors.toList());
+        final List<PathWithDate> list;
+        try (var stream = Files.list(dir)) {
+            list = stream
+                    .filter(f -> f.getFileName().toString().startsWith("NewsPage-"))
+                    .map(f -> {
+                        try {
+                            String d = f.getFileName().toString().substring(9, 19);
+                            return new PathWithDate(f, LocalDate.parse(d));
+                        } catch (Exception e) {
+                            return null;
+                        }
+                    })
+                    .filter(Objects::nonNull)
+                    .sorted((a, b) -> b.getDate().compareTo(a.getDate()))
+                    .toList();
+        }
 
         ArrayNode arr = MAPPER.createArrayNode();
-        for (PathWithDate pw : list) arr.add(pw.getDate().toString());
+        for (PathWithDate pw : list) {
+            arr.add(pw.getDate().toString());
+        }
 
         ObjectNode root = MAPPER.createObjectNode();
         root.set("dates", arr);
