@@ -53,9 +53,9 @@ async function loadDataForDate(dateStr) {
     if (!res.ok) throw new Error("数据文件不存在");
     const data = await res.json();
 
-    renderList(bbcList, data.bbc || []);
-    renderList(baiduList, data.baidu || []);
-    renderList(toutiaoList, data.toutiao || []);
+    renderList(bbcList, data.BBC中文网热点 || []);
+    renderList(baiduList, data.百度热搜 || []);
+    renderList(toutiaoList, data.今日头条热榜 || []);
 
     status.textContent = "已加载 " + dateStr + " 数据。";
   } catch (e) {

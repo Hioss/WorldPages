@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * @author      程春海
  * @version     1.0
  * @since       2025-11-18
- * 
+ *
  */
 public class SpiderMain {
 
@@ -50,9 +50,9 @@ public class SpiderMain {
         // --- 创建 JSON ----
         ObjectNode root = MAPPER.createObjectNode();
         root.put("date", dateStr);
-        root.set("bbc", toArrayNode(bbc));
-        root.set("baidu", toArrayNode(baidu));
-        root.set("toutiao", toArrayNode(toutiao));
+        root.set("BBC中文网热点", toArrayNode(bbc));
+        root.set("百度热搜", toArrayNode(baidu));
+        root.set("今日头条热榜", toArrayNode(toutiao));
 
         Path dataDir = Paths.get("docs", "data");
         if (!Files.exists(dataDir)) Files.createDirectories(dataDir);
@@ -64,42 +64,42 @@ public class SpiderMain {
         cleanOldFiles(dataDir, 10);
 
         // --- date.json ---
-        generateIndexJson(dataDir);
+        generateDateJson(dataDir);
     }
 
     // ===== BBC 中文网 =====
     private static List<HotItem> fetchBBC() {
-        
+
         // 创建爬虫对象
         GetBbcNews spider = new GetBbcNews();
 
         // 调用 start() 执行爬虫，并返回结果
         List<HotItem> result = spider.start();
-        
+
         return result;
     }
 
     // ===== 百度热搜 =====
     private static List<HotItem> fetchBaidu() {
-        
+
         // 创建爬虫对象
         GetBaiduNews spider = new GetBaiduNews();
 
         // 调用 start() 执行爬虫，并返回结果
         List<HotItem> result = spider.start();
-        
+
         return result;
     }
 
     // ===== 头条热榜 =====
     private static List<HotItem> fetchToutiao() {
-        
+
         // 创建爬虫对象
         GetToutiaoNews spider = new GetToutiaoNews();
 
         // 调用 start() 执行爬虫，并返回结果
         List<HotItem> result = spider.start();
-        
+
         return result;
     }
 
@@ -123,7 +123,7 @@ public class SpiderMain {
         List<PathWithDate> list = new ArrayList<>();
         for (Path p : files) {
             try {
-                String d = p.getFileName().toString().substring(4, 14);
+                String d = p.getFileName().toString().substring(9, 19);
                 list.add(new PathWithDate(p, LocalDate.parse(d)));
             } catch (Exception ignored) {}
         }
@@ -136,12 +136,12 @@ public class SpiderMain {
     }
 
     // ===== date.json =====
-    private static void generateIndexJson(Path dir) throws IOException {
+    private static void generateDateJson(Path dir) throws IOException {
         List<PathWithDate> list = Files.list(dir)
                 .filter(f -> f.getFileName().toString().startsWith("NewsPage-"))
                 .map(f -> {
                     try {
-                        String d = f.getFileName().toString().substring(4, 14);
+                        String d = f.getFileName().toString().substring(9, 19);
                         return new PathWithDate(f, LocalDate.parse(d));
                     } catch (Exception e) {
                         return null;
@@ -156,7 +156,7 @@ public class SpiderMain {
         ObjectNode root = MAPPER.createObjectNode();
         root.set("dates", arr);
 
-        Path indexJson = dir.resolve("date.json");
-        MAPPER.writerWithDefaultPrettyPrinter().writeValue(indexJson.toFile(), root);
+        Path dateJson = dir.resolve("date.json");
+        MAPPER.writerWithDefaultPrettyPrinter().writeValue(dateJson.toFile(), root);
     }
 }
