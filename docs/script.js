@@ -4,8 +4,8 @@ async function loadDates() {
   status.textContent = "加载日期列表…";
 
   try {
-    const res = await fetch("data/index.json?_=" + Date.now());
-    if (!res.ok) throw new Error("index.json 加载失败");
+    const res = await fetch("data/date.json?_=" + Date.now());
+    if (!res.ok) throw new Error("date.json 加载失败");
     const data = await res.json();
 
     const dates = data.dates || [];
@@ -49,7 +49,7 @@ async function loadDataForDate(dateStr) {
   toutiaoList.innerHTML = "";
 
   try {
-    const res = await fetch("data/hot-" + dateStr + ".json?_=" + Date.now());
+    const res = await fetch("data/NewsPage-" + dateStr + ".json?_=" + Date.now());
     if (!res.ok) throw new Error("数据文件不存在");
     const data = await res.json();
 

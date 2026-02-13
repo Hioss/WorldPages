@@ -57,13 +57,13 @@ public class SpiderMain {
         Path dataDir = Paths.get("docs", "data");
         if (!Files.exists(dataDir)) Files.createDirectories(dataDir);
 
-        Path todayFile = dataDir.resolve("hot-" + dateStr + ".json");
+        Path todayFile = dataDir.resolve("NewsPage-" + dateStr + ".json");
         MAPPER.writerWithDefaultPrettyPrinter().writeValue(todayFile.toFile(), root);
 
         // --- 清理旧文件 ---
         cleanOldFiles(dataDir, 10);
 
-        // --- index.json ---
+        // --- date.json ---
         generateIndexJson(dataDir);
     }
 
@@ -117,7 +117,7 @@ public class SpiderMain {
     // ===== 清理旧文件 =====
     private static void cleanOldFiles(Path dir, int keepDays) throws IOException {
         List<Path> files = Files.list(dir)
-                .filter(f -> f.getFileName().toString().startsWith("hot-"))
+                .filter(f -> f.getFileName().toString().startsWith("NewsPage-"))
                 .collect(Collectors.toList());
 
         List<PathWithDate> list = new ArrayList<>();
@@ -135,10 +135,10 @@ public class SpiderMain {
         }
     }
 
-    // ===== index.json =====
+    // ===== date.json =====
     private static void generateIndexJson(Path dir) throws IOException {
         List<PathWithDate> list = Files.list(dir)
-                .filter(f -> f.getFileName().toString().startsWith("hot-"))
+                .filter(f -> f.getFileName().toString().startsWith("NewsPage-"))
                 .map(f -> {
                     try {
                         String d = f.getFileName().toString().substring(4, 14);
@@ -156,7 +156,7 @@ public class SpiderMain {
         ObjectNode root = MAPPER.createObjectNode();
         root.set("dates", arr);
 
-        Path indexJson = dir.resolve("index.json");
+        Path indexJson = dir.resolve("date.json");
         MAPPER.writerWithDefaultPrettyPrinter().writeValue(indexJson.toFile(), root);
     }
 }
