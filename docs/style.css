@@ -36,7 +36,7 @@ header p {
 }
 
 .logo-crop {
-  height: 100px;      /* 显示窗口高度 */
+  height: 120px;      /* 显示窗口高度 */
   overflow: hidden; /* 超出部分裁掉 */
   display: flex;
   align-items: center;
