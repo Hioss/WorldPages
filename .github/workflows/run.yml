@@ -51,7 +51,7 @@ jobs:
       # 同步到 Cloudflare 仓库
       - name: Sync data to Cloudflare repo
         env:
-          TOKEN: ${{ secrets.PUSH_TOKEN }}
+          TOKEN: ${{ secrets.PUSH_CLOUDFLARE_TOKEN }}
         run: |
           echo "Cloning Cloudflare repo..."
           git clone https://x-access-token:${TOKEN}@github.com/Hioss/Cloudflare.git cloudflare-repo
