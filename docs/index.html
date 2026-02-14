@@ -2,15 +2,17 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>全球资讯 - WorldPages</title>
+  <title>鸿海资讯 - WorldPages</title>
   <!-- 添加移动端 viewport -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-  <h1>全球资讯</h1>
-  <p>BBC 中文网 · 百度热搜 · 头条热榜<br>每天上午 11 点自动更新 · 最近 10 天可切换查看</p>
+<header class="site-header">
+  <div class="logo-crop">
+    <img src="./assets/HongHai.png" alt="鸿海资讯" class="site-logo">
+  </div>
+  <p>天行健，君子以自强不息。<br>所可知者，常行于所当行，常止于不可不止。</p>
 </header>
 
 <main class="container">
@@ -20,20 +22,8 @@
     <span id="status"></span>
   </section>
 
-  <section class="columns">
-    <div class="column">
-      <h2>BBC 中文网热点</h2>
-      <div id="bbc-list" class="card-list"></div>
-    </div>
-    <div class="column">
-      <h2>百度热搜</h2>
-      <div id="baidu-list" class="card-list"></div>
-    </div>
-    <div class="column">
-      <h2>头条热榜</h2>
-      <div id="toutiao-list" class="card-list"></div>
-    </div>
-  </section>
+  <!-- 只保留一个容器，栏目由 JS 动态生成 -->
+  <section id="columns" class="columns"></section>
 </main>
 
 <footer>
@@ -41,20 +31,5 @@
 </footer>
 
 <script src="script.js"></script>
-
-<!-- 监听 h2 点击事件，添加手机端折叠效果。 -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const headers = document.querySelectorAll(".column h2");
-
-  headers.forEach(h2 => {
-    h2.addEventListener("click", function () {
-      const column = h2.closest(".column");
-      column.classList.toggle("collapsed");
-    });
-  });
-});
-</script>
-
 </body>
 </html>

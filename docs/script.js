@@ -14,7 +14,6 @@ async function loadDates() {
       return;
     }
 
-    // 填充下拉框
     select.innerHTML = "";
     dates.forEach(d => {
       const opt = document.createElement("option");
@@ -24,7 +23,6 @@ async function loadDates() {
     });
 
     status.textContent = "";
-    // 默认选最新日期
     await loadDataForDate(dates[0]);
 
     select.addEventListener("change", async () => {
@@ -38,32 +36,52 @@ async function loadDates() {
 
 async function loadDataForDate(dateStr) {
   const status = document.getElementById("status");
+  const columnsEl = document.getElementById("columns");
   status.textContent = "加载 " + dateStr + " 的数据…";
-
-  const bbcList = document.getElementById("bbc-list");
-  const baiduList = document.getElementById("baidu-list");
-  const toutiaoList = document.getElementById("toutiao-list");
-
-  bbcList.innerHTML = "";
-  baiduList.innerHTML = "";
-  toutiaoList.innerHTML = "";
+  columnsEl.innerHTML = "";
 
   try {
     const res = await fetch("data/NewsPage-" + dateStr + ".json?_=" + Date.now());
     if (!res.ok) throw new Error("数据文件不存在");
     const data = await res.json();
 
-    renderList(bbcList, data.BBC中文网热点 || []);
-    renderList(baiduList, data.百度热搜 || []);
-    renderList(toutiaoList, data.今日头条热榜 || []);
+    // 动态栏目：拿到所有 key，排除 date
+    const categories = Object.keys(data).filter(k => k !== "date");
+
+    if (categories.length === 0) {
+      columnsEl.innerHTML = `<div class="empty">该日期文件没有任何栏目</div>`;
+      status.textContent = "已加载 " + dateStr + " 数据（无栏目）。";
+      return;
+    }
+
+    // 逐个生成 column
+    categories.forEach((catName) => {
+      const column = document.createElement("div");
+      column.className = "column";
+
+      const h2 = document.createElement("h2");
+      h2.textContent = catName;
+
+      // 手机端折叠：点标题折叠/展开
+      h2.addEventListener("click", () => {
+        column.classList.toggle("collapsed");
+      });
+
+      const list = document.createElement("div");
+      list.className = "card-list";
+
+      column.appendChild(h2);
+      column.appendChild(list);
+      columnsEl.appendChild(column);
+
+      renderList(list, data[catName] || []);
+    });
 
     status.textContent = "已加载 " + dateStr + " 数据。";
   } catch (e) {
     console.error(e);
     status.textContent = "加载失败：" + e.message;
-    bbcList.innerHTML = '<div class="empty">暂无数据</div>';
-    baiduList.innerHTML = '<div class="empty">暂无数据</div>';
-    toutiaoList.innerHTML = '<div class="empty">暂无数据</div>';
+    columnsEl.innerHTML = `<div class="empty">暂无数据</div>`;
   }
 }
 
