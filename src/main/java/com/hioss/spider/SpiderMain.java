@@ -60,10 +60,10 @@ public class SpiderMain {
         // --- 创建 JSON ----
         ObjectNode root = MAPPER.createObjectNode();
         root.put("date", dateStr);
-        root.set("BBC中文网热点", toArrayNode(bbc));
         root.set("百度热搜", toArrayNode(baidu));
-        root.set("今日头条热榜", toArrayNode(toutiao));
         root.set("新浪微博热搜", toArrayNode(weibo));
+        root.set("今日头条热榜", toArrayNode(toutiao));
+        root.set("BBC中文网热点", toArrayNode(bbc));
         root.set("IT之家日榜", toArrayNode(itdaily));
         root.set("懂球帝热门推荐", toArrayNode(dongqiudi));
 
