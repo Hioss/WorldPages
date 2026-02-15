@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hioss.spider.dto.HotItem;
 import com.hioss.spider.dto.PathWithDate;
-import com.hioss.spider.news.GetBbcNews;
-import com.hioss.spider.news.GetBaiduNews;
-import com.hioss.spider.news.GetToutiaoNews;
-import com.hioss.spider.news.GetWeiboNews;
+import com.hioss.spider.news.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -54,6 +51,12 @@ public class SpiderMain {
         // --- 微博 ---
         List<HotItem> weibo = fetchWeibo();
 
+        // --- IT时代周刊 ---
+        List<HotItem> itdaily = fetchItdaily();
+
+        // --- 懂球帝 ---
+        List<HotItem> dongqiudi = fetchDongqiudi();
+
         // --- 创建 JSON ----
         ObjectNode root = MAPPER.createObjectNode();
         root.put("date", dateStr);
@@ -61,6 +64,8 @@ public class SpiderMain {
         root.set("百度热搜", toArrayNode(baidu));
         root.set("今日头条热榜", toArrayNode(toutiao));
         root.set("新浪微博热搜", toArrayNode(weibo));
+        root.set("IT之家日榜", toArrayNode(itdaily));
+        root.set("懂球帝热门推荐", toArrayNode(dongqiudi));
 
         Path dataDir = Paths.get("docs", "data");
         if (!Files.exists(dataDir)) {
@@ -98,6 +103,18 @@ public class SpiderMain {
     // ===== 微博热搜 =====
     private static List<HotItem> fetchWeibo() {
         GetWeiboNews spider = new GetWeiboNews();
+        return spider.start();
+    }
+
+    // ===== 微博热搜 =====
+    private static List<HotItem> fetchItdaily() {
+        GetIthomeDailyNews spider = new GetIthomeDailyNews();
+        return spider.start();
+    }
+
+    // ===== 微博热搜 =====
+    private static List<HotItem> fetchDongqiudi() {
+        GetDongqiudiHotNews spider = new GetDongqiudiHotNews();
         return spider.start();
     }
 
