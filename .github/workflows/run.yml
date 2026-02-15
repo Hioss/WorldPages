@@ -37,6 +37,7 @@ jobs:
 
       # 提交到当前 WorldPages 仓库
       - name: Commit generated data (WorldPages)
+        shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -44,12 +45,14 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes"
           else
-            git commit -m "update NewsPage data"
+            TS="$(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M:%S JST')"
+            git commit -m "${TS} - NewsPage新闻数据更新 by Bot"
             git push origin main
           fi
 
       # 同步到 Cloudflare 仓库
       - name: Sync data to Cloudflare repo
+        shell: bash
         env:
           TOKEN: ${{ secrets.PUSH_CLOUDFLARE_TOKEN }}
         run: |
@@ -68,6 +71,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes in Cloudflare repo"
           else
-            git commit -m "sync NewsPage data from WorldPages"
+            TS="$(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M:%S JST')"
+            git commit -m "${TS} - NewsPage新闻数据同步 by Bot"
             git push origin main
           fi
