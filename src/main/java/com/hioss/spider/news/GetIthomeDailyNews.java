@@ -55,7 +55,7 @@ public class GetIthomeDailyNews implements PageProcessor {
         if (html == null || html.trim().isEmpty()) return;
 
         // 1) 找到“日榜”出现的位置（首页会同时出现“日榜/周榜/月榜”）
-        int start = indexOfIgnoreCase(html, "日榜");
+        int start = indexOfIgnoreCase(html);
         if (start < 0) return;
 
         // 2) 从“日榜”附近开始，用正则扫 <a href="...">title</a>
@@ -121,9 +121,7 @@ public class GetIthomeDailyNews implements PageProcessor {
 
         // 只保留 ithome 的新闻链接（避免抓到广告/跳转）
         // 如果你希望保留站外链接，可以删除这一段。
-        if (!(l.contains("ithome.com"))) return false;
-
-        return true;
+        return l.contains("ithome.com");
     }
 
     private String normalizeUrl(String href) {
@@ -159,10 +157,10 @@ public class GetIthomeDailyNews implements PageProcessor {
         return s;
     }
 
-    private int indexOfIgnoreCase(String text, String needle) {
-        if (text == null || needle == null) return -1;
+    private int indexOfIgnoreCase(String text) {
+        if (text == null) return -1;
         String t = text.toLowerCase();
-        String n = needle.toLowerCase();
+        String n = "日榜".toLowerCase();
         return t.indexOf(n);
     }
 
@@ -182,7 +180,7 @@ public class GetIthomeDailyNews implements PageProcessor {
         // 数字实体：&#12345;
         Pattern dec = Pattern.compile("&#(\\d+);");
         Matcher mDec = dec.matcher(s);
-        StringBuffer sbDec = new StringBuffer();
+        StringBuilder sbDec = new StringBuilder();
         while (mDec.find()) {
             try {
                 int code = Integer.parseInt(mDec.group(1));
@@ -197,7 +195,7 @@ public class GetIthomeDailyNews implements PageProcessor {
         // 十六进制实体：&#x1F600;
         Pattern hex = Pattern.compile("&#x([0-9a-fA-F]+);");
         Matcher mHex = hex.matcher(s);
-        StringBuffer sbHex = new StringBuffer();
+        StringBuilder sbHex = new StringBuilder();
         while (mHex.find()) {
             try {
                 int code = Integer.parseInt(mHex.group(1), 16);

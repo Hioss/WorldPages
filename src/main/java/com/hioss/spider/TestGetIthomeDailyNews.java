@@ -7,7 +7,6 @@ import java.util.List;
 
 /**
  * 测试：抓取 IT之家 日榜 新闻
- *
  * 直接运行 main 方法即可在控制台看到抓取结果
  */
 public class TestGetIthomeDailyNews {

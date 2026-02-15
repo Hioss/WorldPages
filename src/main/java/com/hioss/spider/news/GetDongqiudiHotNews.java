@@ -16,11 +16,9 @@ import java.util.Locale;
 
 /**
  * 懂球帝：抓取「热门推荐/热门」前 10 条（接口版，更稳定）
- *
  * 说明：
  * - 懂球帝网页端首页多为前端动态渲染，直接抓 HTML 常常拿不到“热门推荐”列表
  * - 改为请求懂球帝 App 的 tab 接口（热门：104），解析 JSON 获取文章标题与 share 链接
- *
  * 返回值：List<HotItem>（不改变格式）
  */
 public class GetDongqiudiHotNews {
@@ -45,7 +43,7 @@ public class GetDongqiudiHotNews {
 
             // 数据结构（常见）：root.contents[0].articles[*].title / share
             JsonNode contents = root.path("contents");
-            if (!contents.isArray() || contents.size() == 0) return List.of();
+            if (!contents.isArray() || contents.isEmpty()) return List.of();
 
             List<HotItem> out = new ArrayList<>(LIMIT);
 
