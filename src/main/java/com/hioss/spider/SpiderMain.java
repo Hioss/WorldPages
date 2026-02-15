@@ -8,6 +8,7 @@ import com.hioss.spider.dto.PathWithDate;
 import com.hioss.spider.news.GetBbcNews;
 import com.hioss.spider.news.GetBaiduNews;
 import com.hioss.spider.news.GetToutiaoNews;
+import com.hioss.spider.news.GetWeiboNews;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -50,12 +51,16 @@ public class SpiderMain {
         // --- 头条 ---
         List<HotItem> toutiao = fetchToutiao();
 
+        // --- 微博 ---
+        List<HotItem> weibo = fetchWeibo();
+
         // --- 创建 JSON ----
         ObjectNode root = MAPPER.createObjectNode();
         root.put("date", dateStr);
         root.set("BBC中文网热点", toArrayNode(bbc));
         root.set("百度热搜", toArrayNode(baidu));
         root.set("今日头条热榜", toArrayNode(toutiao));
+        root.set("新浪微博热搜", toArrayNode(weibo));
 
         Path dataDir = Paths.get("docs", "data");
         if (!Files.exists(dataDir)) {
@@ -87,6 +92,12 @@ public class SpiderMain {
     // ===== 头条热榜 =====
     private static List<HotItem> fetchToutiao() {
         GetToutiaoNews spider = new GetToutiaoNews();
+        return spider.start();
+    }
+
+    // ===== 微博热搜 =====
+    private static List<HotItem> fetchWeibo() {
+        GetWeiboNews spider = new GetWeiboNews();
         return spider.start();
     }
 
