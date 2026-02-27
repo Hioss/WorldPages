@@ -39,9 +39,10 @@ jobs:
       - name: Commit generated data (WorldPages)
         shell: bash
         run: |
+          set -e
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/data/*.json
+          git add -A docs/data
           if git diff --cached --quiet; then
             echo "No changes"
           else
@@ -56,18 +57,24 @@ jobs:
         env:
           TOKEN: ${{ secrets.PUSH_CLOUDFLARE_TOKEN }}
         run: |
+          set -e
           echo "Cloning Cloudflare repo..."
           git clone https://x-access-token:${TOKEN}@github.com/Hioss/Cloudflare.git cloudflare-repo
             
           echo "Copying json data to Cloudflare/public/data ..."
+          # 先清空目标目录，才能同步“删除”
+          rm -f cloudflare-repo/public/data/NewsPage-*.json
+          rm -f cloudflare-repo/public/data/date.json
+          
+          # 再复制当前最新的数据（包含 date.json）
           cp -rf docs/data/*.json cloudflare-repo/public/data/
             
           cd cloudflare-repo
             
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            
-          git add public/data/*.json
+          
+          git add -A public/data
           if git diff --cached --quiet; then
             echo "No changes in Cloudflare repo"
           else
