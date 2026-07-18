@@ -8,6 +8,10 @@ import com.hioss.spider.dto.PathWithDate;
 import com.hioss.spider.news.*;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,6 +38,11 @@ import java.util.Objects;
 public class SpiderMain {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final String FILE_UPLOAD_API_URL = "https://hioss9.com/api/file/upload-github-api";
+    private static final String FILE_UPLOAD_API_KEY_ENV = "FILE_UPLOAD_API_KEY";
+    private static final HttpClient HTTP_CLIENT = HttpClient.newBuilder()
+            .followRedirects(HttpClient.Redirect.NORMAL)
+            .build();
 
     public static void main(String[] args) throws Exception {
         LocalDate today = LocalDate.now(ZoneId.of("Asia/Tokyo"));
@@ -79,7 +88,11 @@ public class SpiderMain {
         cleanOldFiles(dataDir);
 
         // --- date.json ---
-        generateDateJson(dataDir);
+        Path dateFile = generateDateJson(dataDir);
+
+        // --- 上传到 Cloudflare R2 的 GitHub 目录 ---
+        uploadJsonToR2(todayFile);
+        uploadJsonToR2(dateFile);
     }
 
     // ===== BBC 中文网 =====
@@ -156,7 +169,7 @@ public class SpiderMain {
     }
 
     // ===== date.json =====
-    private static void generateDateJson(Path dir) throws IOException {
+    private static Path generateDateJson(Path dir) throws IOException {
         final List<PathWithDate> list;
         try (var stream = Files.list(dir)) {
             list = stream
@@ -184,5 +197,29 @@ public class SpiderMain {
 
         Path dateJson = dir.resolve("date.json");
         MAPPER.writerWithDefaultPrettyPrinter().writeValue(dateJson.toFile(), root);
+        return dateJson;
+    }
+
+    private static void uploadJsonToR2(Path jsonFile) throws IOException, InterruptedException {
+        String apiKey = System.getenv(FILE_UPLOAD_API_KEY_ENV);
+        if (apiKey == null || apiKey.isBlank()) {
+            throw new IllegalStateException(FILE_UPLOAD_API_KEY_ENV + " is not configured");
+        }
+
+        HttpRequest request = HttpRequest.newBuilder(URI.create(FILE_UPLOAD_API_URL))
+                .header("Content-Type", "application/json; charset=UTF-8")
+                .header("Accept", "application/json")
+                .header("x-api-key", apiKey.trim())
+                .header("x-filename", jsonFile.getFileName().toString())
+                .POST(HttpRequest.BodyPublishers.ofFile(jsonFile))
+                .build();
+
+        HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() < 200 || response.statusCode() >= 300) {
+            throw new IOException("R2 upload failed for " + jsonFile.getFileName()
+                    + ": HTTP " + response.statusCode() + " - " + response.body());
+        }
+
+        System.out.println("Uploaded to R2 GitHub directory: " + jsonFile.getFileName());
     }
 }
