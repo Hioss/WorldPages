@@ -11,6 +11,9 @@ repositories {
 }
 
 dependencies {
+    // 繁体中文转简体中文
+    implementation 'com.github.houbb:opencc4j:1.8.1'
+
     // WebMagic 爬虫
     implementation 'us.codecraft:webmagic-core:0.7.5'
     implementation 'us.codecraft:webmagic-extension:0.7.5'

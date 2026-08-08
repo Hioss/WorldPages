@@ -3,6 +3,7 @@ package com.hioss.spider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.github.houbb.opencc4j.util.ZhConverterUtil;
 import com.hioss.spider.dto.HotItem;
 import com.hioss.spider.dto.PathWithDate;
 import com.hioss.spider.news.*;
@@ -50,6 +51,7 @@ public class SpiderMain {
 
         // --- BBC ---
         List<HotItem> bbc = fetchBBC();
+        bbc.forEach(item -> item.setTitle(ZhConverterUtil.toSimple(item.getTitle())));
 
         // --- 百度 ---
         List<HotItem> baidu = fetchBaidu();
@@ -91,8 +93,12 @@ public class SpiderMain {
         Path dateFile = generateDateJson(dataDir);
 
         // --- 上传到 Cloudflare R2 的 GitHub 目录 ---
-        uploadJsonToR2(todayFile);
-        uploadJsonToR2(dateFile);
+        if (hasFileUploadApiKey()) {
+            uploadJsonToR2(todayFile);
+            uploadJsonToR2(dateFile);
+        } else {
+            System.out.println(FILE_UPLOAD_API_KEY_ENV + " is not configured; skipping R2 upload.");
+        }
     }
 
     // ===== BBC 中文网 =====
@@ -202,9 +208,6 @@ public class SpiderMain {
 
     private static void uploadJsonToR2(Path jsonFile) throws IOException, InterruptedException {
         String apiKey = System.getenv(FILE_UPLOAD_API_KEY_ENV);
-        if (apiKey == null || apiKey.isBlank()) {
-            throw new IllegalStateException(FILE_UPLOAD_API_KEY_ENV + " is not configured");
-        }
 
         HttpRequest request = HttpRequest.newBuilder(URI.create(FILE_UPLOAD_API_URL))
                 .header("Content-Type", "application/json; charset=UTF-8")
@@ -221,5 +224,10 @@ public class SpiderMain {
         }
 
         System.out.println("Uploaded to R2 GitHub directory: " + jsonFile.getFileName());
+    }
+
+    private static boolean hasFileUploadApiKey() {
+        String apiKey = System.getenv(FILE_UPLOAD_API_KEY_ENV);
+        return apiKey != null && !apiKey.isBlank();
     }
 }
