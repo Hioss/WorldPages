@@ -1,0 +1,159 @@
+{
+  "date" : "2026-11-22",
+  "百度热搜" : [ ],
+  "新浪微博热搜" : [ {
+    "title" : "羽绒服生意变天了",
+    "link" : "https://s.weibo.com/weibo?q=%23%E7%BE%BD%E7%BB%92%E6%9C%8D%E7%94%9F%E6%84%8F%E5%8F%98%E5%A4%A9%E4%BA%86%23"
+  }, {
+    "title" : "央视揭秘网络女主播真实生态",
+    "link" : "https://s.weibo.com/weibo?q=%23%E5%A4%AE%E8%A7%86%E6%8F%AD%E7%A7%98%E7%BD%91%E7%BB%9C%E5%A5%B3%E4%B8%BB%E6%92%AD%E7%9C%9F%E5%AE%9E%E7%94%9F%E6%80%81%23"
+  }, {
+    "title" : "图览APEC中国年75项主要成果",
+    "link" : "https://s.weibo.com/weibo?q=%23%E5%9B%BE%E8%A7%88APEC%E4%B8%AD%E5%9B%BD%E5%B9%B475%E9%A1%B9%E4%B8%BB%E8%A6%81%E6%88%90%E6%9E%9C%23"
+  }, {
+    "title" : "余文乐躯体化严重到不能开车",
+    "link" : "https://s.weibo.com/weibo?q=%23%E4%BD%99%E6%96%87%E4%B9%90%E8%BA%AF%E4%BD%93%E5%8C%96%E4%B8%A5%E9%87%8D%E5%88%B0%E4%B8%8D%E8%83%BD%E5%BC%80%E8%BD%A6%23"
+  }, {
+    "title" : "朱瞻基 扫黄",
+    "link" : "https://s.weibo.com/weibo?q=%E6%9C%B1%E7%9E%BB%E5%9F%BA+%E6%89%AB%E9%BB%84"
+  }, {
+    "title" : "白小纯粉丝群发言",
+    "link" : "https://s.weibo.com/weibo?q=%23%E7%99%BD%E5%B0%8F%E7%BA%AF%E7%B2%89%E4%B8%9D%E7%BE%A4%E5%8F%91%E8%A8%80%23"
+  }, {
+    "title" : "榜一大哥的占有欲从屏幕爬进现实",
+    "link" : "https://s.weibo.com/weibo?q=%23%E6%A6%9C%E4%B8%80%E5%A4%A7%E5%93%A5%E7%9A%84%E5%8D%A0%E6%9C%89%E6%AC%B2%E4%BB%8E%E5%B1%8F%E5%B9%95%E7%88%AC%E8%BF%9B%E7%8E%B0%E5%AE%9E%23"
+  }, {
+    "title" : "两京十五日口碑两极分化",
+    "link" : "https://s.weibo.com/weibo?q=%E4%B8%A4%E4%BA%AC%E5%8D%81%E4%BA%94%E6%97%A5%E5%8F%A3%E7%A2%91%E4%B8%A4%E6%9E%81%E5%88%86%E5%8C%96"
+  }, {
+    "title" : "25万页AI黎曼猜想证明难核验",
+    "link" : "https://s.weibo.com/weibo?q=25%E4%B8%87%E9%A1%B5AI%E9%BB%8E%E6%9B%BC%E7%8C%9C%E6%83%B3%E8%AF%81%E6%98%8E%E9%9A%BE%E6%A0%B8%E9%AA%8C"
+  }, {
+    "title" : "特朗普深圳不拉窗帘原因找到了",
+    "link" : "https://s.weibo.com/weibo?q=%23%E7%89%B9%E6%9C%97%E6%99%AE%E6%B7%B1%E5%9C%B3%E4%B8%8D%E6%8B%89%E7%AA%97%E5%B8%98%E5%8E%9F%E5%9B%A0%E6%89%BE%E5%88%B0%E4%BA%86%23"
+  } ],
+  "今日头条热榜" : [ {
+    "title" : "小雪节气有何习俗",
+    "link" : "https://www.toutiao.com/trending/7710547804083683364/?category_name=topic_innerflow&event_type=hot_board&log_pb=%7B%22category_name%22%3A%22topic_innerflow%22%2C%22cluster_type%22%3A%2216%22%2C%22enter_from%22%3A%22click_category%22%2C%22entrance_hotspot%22%3A%22outside%22%2C%22event_type%22%3A%22hot_board%22%2C%22hot_board_cluster_id%22%3A%227710547804083683364%22%2C%22hot_board_impr_id%22%3A%222026112210003798B558FDB2AC2520A032%22%2C%22jump_page%22%3A%22hot_board_page%22%2C%22location%22%3A%22news_hot_card%22%2C%22page_location%22%3A%22hot_board_page%22%2C%22source%22%3A%22trending_tab%22%2C%22style_id%22%3A%2240132%22%2C%22title%22%3A%22%E5%B0%8F%E9%9B%AA%E8%8A%82%E6%B0%94%E6%9C%89%E4%BD%95%E4%B9%A0%E4%BF%97%22%7D&rank=&style_id=40132&topic_id=7710547804083683364"
+  }, {
+    "title" : "特朗普回应深圳乘车时不拉窗帘",
+    "link" : "https://www.toutiao.com/trending/7710089748098076223/?category_name=topic_innerflow&event_type=hot_board&log_pb=%7B%22category_name%22%3A%22topic_innerflow%22%2C%22cluster_type%22%3A%222%22%2C%22enter_from%22%3A%22click_category%22%2C%22entrance_hotspot%22%3A%22outside%22%2C%22event_type%22%3A%22hot_board%22%2C%22hot_board_cluster_id%22%3A%227710089748098076223%22%2C%22hot_board_impr_id%22%3A%222026112210003798B558FDB2AC2520A032%22%2C%22jump_page%22%3A%22hot_board_page%22%2C%22location%22%3A%22news_hot_card%22%2C%22page_location%22%3A%22hot_board_page%22%2C%22source%22%3A%22trending_tab%22%2C%22style_id%22%3A%2240132%22%2C%22title%22%3A%22%E7%89%B9%E6%9C%97%E6%99%AE%E5%9B%9E%E5%BA%94%E6%B7%B1%E5%9C%B3%E4%B9%98%E8%BD%A6%E6%97%B6%E4%B8%8D%E6%8B%89%E7%AA%97%E5%B8%98%22%7D&rank=&style_id=40132&topic_id=7710089748098076223"
+  }, {
+    "title" : "APEC“中国年”取得哪些成果",
+    "link" : "https://www.toutiao.com/trending/7710560818030448170/?category_name=topic_innerflow&event_type=hot_board&log_pb=%7B%22category_name%22%3A%22topic_innerflow%22%2C%22cluster_type%22%3A%222%22%2C%22enter_from%22%3A%22click_category%22%2C%22entrance_hotspot%22%3A%22outside%22%2C%22event_type%22%3A%22hot_board%22%2C%22hot_board_cluster_id%22%3A%227710560818030448170%22%2C%22hot_board_impr_id%22%3A%222026112210003798B558FDB2AC2520A032%22%2C%22jump_page%22%3A%22hot_board_page%22%2C%22location%22%3A%22news_hot_card%22%2C%22page_location%22%3A%22hot_board_page%22%2C%22source%22%3A%22trending_tab%22%2C%22style_id%22%3A%2240132%22%2C%22title%22%3A%22APEC%E2%80%9C%E4%B8%AD%E5%9B%BD%E5%B9%B4%E2%80%9D%E5%8F%96%E5%BE%97%E5%93%AA%E4%BA%9B%E6%88%90%E6%9E%9C%22%7D&rank=&style_id=40132&topic_id=7710560818030448170"
+  }, {
+    "title" : "张雪骑机车没上赛道就摔车",
+    "link" : "https://www.toutiao.com/trending/7710287693711835177/?category_name=topic_innerflow&event_type=hot_board&log_pb=%7B%22category_name%22%3A%22topic_innerflow%22%2C%22cluster_type%22%3A%222%22%2C%22enter_from%22%3A%22click_category%22%2C%22entrance_hotspot%22%3A%22outside%22%2C%22event_type%22%3A%22hot_board%22%2C%22hot_board_cluster_id%22%3A%227710287693711835177%22%2C%22hot_board_impr_id%22%3A%222026112210003798B558FDB2AC2520A032%22%2C%22jump_page%22%3A%22hot_board_page%22%2C%22location%22%3A%22news_hot_card%22%2C%22page_location%22%3A%22hot_board_page%22%2C%22source%22%3A%22trending_tab%22%2C%22style_id%22%3A%2240132%22%2C%22title%22%3A%22%E5%BC%A0%E9%9B%AA%E9%AA%91%E6%9C%BA%E8%BD%A6%E6%B2%A1%E4%B8%8A%E8%B5%9B%E9%81%93%E5%B0%B1%E6%91%94%E8%BD%A6%22%7D&rank=&style_id=40132&topic_id=7710287693711835177"
+  }, {
+    "title" : "特朗普称将与伊朗达成永久性协议",
+    "link" : "https://www.toutiao.com/trending/7710763190757363209/?category_name=topic_innerflow&event_type=hot_board&log_pb=%7B%22category_name%22%3A%22topic_innerflow%22%2C%22cluster_type%22%3A%225%22%2C%22enter_from%22%3A%22click_category%22%2C%22entrance_hotspot%22%3A%22outside%22%2C%22event_type%22%3A%22hot_board%22%2C%22hot_board_cluster_id%22%3A%227710763190757363209%22%2C%22hot_board_impr_id%22%3A%222026112210003798B558FDB2AC2520A032%22%2C%22jump_page%22%3A%22hot_board_page%22%2C%22location%22%3A%22news_hot_card%22%2C%22page_location%22%3A%22hot_board_page%22%2C%22source%22%3A%22trending_tab%22%2C%22style_id%22%3A%2240132%22%2C%22title%22%3A%22%E7%89%B9%E6%9C%97%E6%99%AE%E7%A7%B0%E5%B0%86%E4%B8%8E%E4%BC%8A%E6%9C%97%E8%BE%BE%E6%88%90%E6%B0%B8%E4%B9%85%E6%80%A7%E5%8D%8F%E8%AE%AE%22%7D&rank=&style_id=40132&topic_id=7710763190757363209"
+  }, {
+    "title" : "特朗普：中国的活力令人惊叹",
+    "link" : "https://www.toutiao.com/trending/7710739909857775147/?category_name=topic_innerflow&event_type=hot_board&log_pb=%7B%22category_name%22%3A%22topic_innerflow%22%2C%22cluster_type%22%3A%222%22%2C%22enter_from%22%3A%22click_category%22%2C%22entrance_hotspot%22%3A%22outside%22%2C%22event_type%22%3A%22hot_board%22%2C%22hot_board_cluster_id%22%3A%227710739909857775147%22%2C%22hot_board_impr_id%22%3A%222026112210003798B558FDB2AC2520A032%22%2C%22jump_page%22%3A%22hot_board_page%22%2C%22location%22%3A%22news_hot_card%22%2C%22page_location%22%3A%22hot_board_page%22%2C%22source%22%3A%22trending_tab%22%2C%22style_id%22%3A%2240132%22%2C%22title%22%3A%22%E7%89%B9%E6%9C%97%E6%99%AE%EF%BC%9A%E4%B8%AD%E5%9B%BD%E7%9A%84%E6%B4%BB%E5%8A%9B%E4%BB%A4%E4%BA%BA%E6%83%8A%E5%8F%B9%22%7D&rank=&style_id=40132&topic_id=7710739909857775147"
+  }, {
+    "title" : "成都国际乒联混团世界杯参赛名单",
+    "link" : "https://www.toutiao.com/trending/7709069652509737522/?category_name=topic_innerflow&event_type=hot_board&log_pb=%7B%22category_name%22%3A%22topic_innerflow%22%2C%22cluster_type%22%3A%2215%22%2C%22enter_from%22%3A%22click_category%22%2C%22entrance_hotspot%22%3A%22outside%22%2C%22event_type%22%3A%22hot_board%22%2C%22hot_board_cluster_id%22%3A%227709069652509737522%22%2C%22hot_board_impr_id%22%3A%222026112210003798B558FDB2AC2520A032%22%2C%22jump_page%22%3A%22hot_board_page%22%2C%22location%22%3A%22news_hot_card%22%2C%22page_location%22%3A%22hot_board_page%22%2C%22source%22%3A%22trending_tab%22%2C%22style_id%22%3A%2240132%22%2C%22title%22%3A%22%E6%88%90%E9%83%BD%E5%9B%BD%E9%99%85%E4%B9%92%E8%81%94%E6%B7%B7%E5%9B%A2%E4%B8%96%E7%95%8C%E6%9D%AF%E5%8F%82%E8%B5%9B%E5%90%8D%E5%8D%95%22%7D&rank=&style_id=40132&topic_id=7709069652509737522"
+  }, {
+    "title" : "记者直击克里米亚大桥连续遭袭",
+    "link" : "https://www.toutiao.com/trending/7710452526436532787/?category_name=topic_innerflow&event_type=hot_board&log_pb=%7B%22category_name%22%3A%22topic_innerflow%22%2C%22cluster_type%22%3A%2215%22%2C%22enter_from%22%3A%22click_category%22%2C%22entrance_hotspot%22%3A%22outside%22%2C%22event_type%22%3A%22hot_board%22%2C%22hot_board_cluster_id%22%3A%227710452526436532787%22%2C%22hot_board_impr_id%22%3A%222026112210003798B558FDB2AC2520A032%22%2C%22jump_page%22%3A%22hot_board_page%22%2C%22location%22%3A%22news_hot_card%22%2C%22page_location%22%3A%22hot_board_page%22%2C%22source%22%3A%22trending_tab%22%2C%22style_id%22%3A%2240132%22%2C%22title%22%3A%22%E8%AE%B0%E8%80%85%E7%9B%B4%E5%87%BB%E5%85%8B%E9%87%8C%E7%B1%B3%E4%BA%9A%E5%A4%A7%E6%A1%A5%E8%BF%9E%E7%BB%AD%E9%81%AD%E8%A2%AD%22%7D&rank=&style_id=40132&topic_id=7710452526436532787"
+  }, {
+    "title" : "演员张国强为何突然霸屏",
+    "link" : "https://www.toutiao.com/trending/7710426173206856219/?category_name=topic_innerflow&event_type=hot_board&log_pb=%7B%22category_name%22%3A%22topic_innerflow%22%2C%22cluster_type%22%3A%224%22%2C%22enter_from%22%3A%22click_category%22%2C%22entrance_hotspot%22%3A%22outside%22%2C%22event_type%22%3A%22hot_board%22%2C%22hot_board_cluster_id%22%3A%227710426173206856219%22%2C%22hot_board_impr_id%22%3A%222026112210003798B558FDB2AC2520A032%22%2C%22jump_page%22%3A%22hot_board_page%22%2C%22location%22%3A%22news_hot_card%22%2C%22page_location%22%3A%22hot_board_page%22%2C%22source%22%3A%22trending_tab%22%2C%22style_id%22%3A%2240132%22%2C%22title%22%3A%22%E6%BC%94%E5%91%98%E5%BC%A0%E5%9B%BD%E5%BC%BA%E4%B8%BA%E4%BD%95%E7%AA%81%E7%84%B6%E9%9C%B8%E5%B1%8F%22%7D&rank=&style_id=40132&topic_id=7710426173206856219"
+  }, {
+    "title" : "《两京十五日》口碑两极分化",
+    "link" : "https://www.toutiao.com/trending/7710608319765611058/?category_name=topic_innerflow&event_type=hot_board&log_pb=%7B%22category_name%22%3A%22topic_innerflow%22%2C%22cluster_type%22%3A%2216%22%2C%22enter_from%22%3A%22click_category%22%2C%22entrance_hotspot%22%3A%22outside%22%2C%22event_type%22%3A%22hot_board%22%2C%22hot_board_cluster_id%22%3A%227710608319765611058%22%2C%22hot_board_impr_id%22%3A%222026112210003798B558FDB2AC2520A032%22%2C%22jump_page%22%3A%22hot_board_page%22%2C%22location%22%3A%22news_hot_card%22%2C%22page_location%22%3A%22hot_board_page%22%2C%22source%22%3A%22trending_tab%22%2C%22style_id%22%3A%2240132%22%2C%22title%22%3A%22%E3%80%8A%E4%B8%A4%E4%BA%AC%E5%8D%81%E4%BA%94%E6%97%A5%E3%80%8B%E5%8F%A3%E7%A2%91%E4%B8%A4%E6%9E%81%E5%88%86%E5%8C%96%22%7D&rank=&style_id=40132&topic_id=7710608319765611058"
+  } ],
+  "BBC中文网热点" : [ {
+    "title" : "从仓颉换成汉语拼音：电脑输入法会影响下一代学习中文吗？",
+    "link" : "https://www.bbc.com/zhongwen/articles/cxq6e216p7ylo/trad?at_medium=RSS&at_campaign=rss"
+  }, {
+    "title" : "地球迎来新的「迷你月亮」——它并不孤单",
+    "link" : "https://www.bbc.com/zhongwen/articles/cqy7rg0yyxxko/trad?at_medium=RSS&at_campaign=rss"
+  }, {
+    "title" : "中俄美三方峰会「场面大于实质成果」",
+    "link" : "https://www.bbc.com/zhongwen/articles/cm5y120z0pw0o/trad?at_medium=RSS&at_campaign=rss"
+  }, {
+    "title" : "缅甸种族灭绝裁决影响深远的历史意义",
+    "link" : "https://www.bbc.com/zhongwen/articles/c5n4eylmmg8po/trad?at_medium=RSS&at_campaign=rss"
+  }, {
+    "title" : "英国女子遭丈夫下药，13年间被陌生男子轮流性侵",
+    "link" : "https://www.bbc.com/zhongwen/articles/cx8dv4e080ldo/trad?at_medium=RSS&at_campaign=rss"
+  }, {
+    "title" : "高雄选战「知识蓝」对决「新潮流」，国民党能复制「韩流」吗？",
+    "link" : "https://www.bbc.com/zhongwen/articles/c6n4ex4y9837o/trad?at_medium=RSS&at_campaign=rss"
+  }, {
+    "title" : "「蓝白合」示范区：新竹市选情如何透露台湾第三势力的未来？",
+    "link" : "https://www.bbc.com/zhongwen/articles/cme3d27d7lnpo/trad?at_medium=RSS&at_campaign=rss"
+  }, {
+    "title" : "九合一前夕：台湾几乎年年选举，会引起「投票疲劳」吗？",
+    "link" : "https://www.bbc.com/zhongwen/articles/c63egjkzqpz2o/trad?at_medium=RSS&at_campaign=rss"
+  }, {
+    "title" : "「九合一」五大看点：「洋流」能否撼动台北？谁在卡位2028？",
+    "link" : "https://www.bbc.com/zhongwen/articles/cm8xzrg40dq1o/trad?at_medium=RSS&at_campaign=rss"
+  }, {
+    "title" : "中美俄元首峰会：从乌克兰、伊朗、和平宣言到承诺核对话",
+    "link" : "https://www.bbc.com/zhongwen/articles/c38x04eppnpdo/trad?at_medium=RSS&at_campaign=rss"
+  } ],
+  "IT之家日榜" : [ {
+    "title" : "消息称华为 Mate 90 Air 手机搭载麒麟 9020 芯片，厚 6.58mm",
+    "link" : "https://www.ithome.com/1/030/439.htm"
+  }, {
+    "title" : "全球仅此一件：马斯克到访上海工厂收到员工特制“边角料手办”，陶琳晒图",
+    "link" : "https://www.ithome.com/1/030/334.htm"
+  }, {
+    "title" : "英伟达董事会为何对黄仁勋态度转变？婚外情无关紧要，核心问题在于诚信",
+    "link" : "https://www.ithome.com/1/030/325.htm"
+  }, {
+    "title" : "消息称华为星芒品牌已在内部酝酿约三年，将承担更多前沿技术的率先应用任务",
+    "link" : "https://www.ithome.com/1/030/353.htm"
+  }, {
+    "title" : "黄仁勋没有的“护身符”：Anthropic 创始人手握 50.1% 投票权建立“反夺权”机制",
+    "link" : "https://www.ithome.com/1/030/348.htm"
+  }, {
+    "title" : "《GTA 6》卖爆了：预售超 2400 万份，一家实体游戏店却只卖出 5 份",
+    "link" : "https://www.ithome.com/1/030/368.htm"
+  }, {
+    "title" : "南非开发者宣称独自开发操作系统 Impossible OS：兼容 Win32 和 Linux 二进制程序，两年后见",
+    "link" : "https://www.ithome.com/1/030/479.htm"
+  }, {
+    "title" : "不只是华为，消息称其他厂商也考虑为旗舰产品线引入阔直板形态",
+    "link" : "https://www.ithome.com/1/030/409.htm"
+  }, {
+    "title" : "奥迪首款大型豪华全尺寸 SUV，一汽奥迪官宣 Q9 将在广州车展完成中国首秀",
+    "link" : "https://www.ithome.com/1/030/466.htm"
+  }, {
+    "title" : "华为 Mate X8 大折叠手机黑白双色亮相，11 月 24 日发布",
+    "link" : "https://www.ithome.com/1/030/324.htm"
+  } ],
+  "懂球帝热门推荐" : [ {
+    "title" : "TA记者：梅西掷球击中对手面部该给红牌",
+    "link" : "https://www.dongqiudi.com/article/6680537"
+  }, {
+    "title" : "队报：杜埃右膝前十字韧带撕裂将伤缺数月，将接受核磁扫描确定伤情程度",
+    "link" : "https://www.dongqiudi.com/article/6680075"
+  }, {
+    "title" : "迈阿密国际0-3哥伦布机员，塔皮亚梅开二度，卢汉被罚下",
+    "link" : "https://www.dongqiudi.com/article/6680576"
+  }, {
+    "title" : "FIFPRO谴责：拜仁多次公开质疑穆西亚拉合同，这令人担忧",
+    "link" : "https://www.dongqiudi.com/article/6678641"
+  }, {
+    "title" : "大连英博告别斯坦丘：天气渐凉，注意保暖，让我们后会有期",
+    "link" : "https://www.dongqiudi.com/article/6677140"
+  }, {
+    "title" : "剑南春｜皇马2-1塞尔塔迎9连胜，贝林厄姆破门，埃斯皮制胜",
+    "link" : "https://www.dongqiudi.com/article/6680089"
+  }, {
+    "title" : "拜仁官方：凯恩已成功接受左脚踝韧带手术；据悉将伤缺3个月",
+    "link" : "https://www.dongqiudi.com/article/6677142"
+  }, {
+    "title" : "剑南春丨阿森纳2-2纽卡，埃泽建功，马杜埃凯救主，拉亚伤退",
+    "link" : "https://www.dongqiudi.com/article/6679633"
+  }, {
+    "title" : "剑南春｜切尔西1-4完败利兹联，奥卡福尔双响，埃梅加破门",
+    "link" : "https://www.dongqiudi.com/article/6678989"
+  }, {
+    "title" : "剑南春｜热刺2-0伊普斯维奇，巴尼特生涯首球+助攻索兰克破门",
+    "link" : "https://www.dongqiudi.com/article/6678971"
+  } ]
+}
