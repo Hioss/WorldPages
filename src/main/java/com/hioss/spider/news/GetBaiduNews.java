@@ -2,6 +2,10 @@ package com.hioss.spider.news;
 
 import com.hioss.spider.dto.HotItem;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
@@ -19,6 +23,9 @@ import java.util.List;
  * 
  */
 public class GetBaiduNews implements PageProcessor {
+    private static final Logger LOG = LoggerFactory.getLogger(GetBaiduNews.class);
+    private static final String BOARD_URL = "https://top.baidu.com/board?tab=realtime";
+    private static final int LIMIT = 10;
 
     //爬虫结果
     private final List<HotItem> list = new ArrayList<>();
@@ -35,26 +42,36 @@ public class GetBaiduNews implements PageProcessor {
      */
     @Override
     public void process(Page page) {
-        // 标题列表
-        List<String> titles = page.getHtml()
-                .css("div.c-single-text-ellipsis", "text")
-                .all();
-
-        // 链接列表
-        List<String> links = page.getHtml()
-                .css("div.category-wrap_iQLoo .title_dIF3B", "href")
-                .all();
-
-        // 保留前 10 条
-        int count = Math.min(10, titles.size());
-
-        for (int i = 0; i < count; i++) {
-            HotItem dto = new HotItem();
-            dto.setTitle(titles.get(i));
-            dto.setLink(links.get(i));
-
-            list.add(dto);
+        List<HotItem> parsed = parseHotItems(page.getRawText());
+        if (parsed.isEmpty()) {
+            LOG.warn("百度热搜页面未解析出榜单条目，HTTP 状态码 {}", page.getStatusCode());
         }
+        list.addAll(parsed);
+    }
+
+    static List<HotItem> parseHotItems(String html) {
+        List<HotItem> result = new ArrayList<>();
+        if (html == null || html.isBlank()) {
+            return result;
+        }
+
+        // 从标题的父链接取地址，避免依赖带构建后缀的类名。
+        for (Element titleElement : Jsoup.parse(html, BOARD_URL).select("a[href] > div.c-single-text-ellipsis")) {
+            Element anchor = titleElement.parent();
+            String title = titleElement.text();
+            if (title.isEmpty() || anchor.attr("href").isBlank()) {
+                continue;
+            }
+            String link = anchor.absUrl("href");
+            if (!link.startsWith("https://") && !link.startsWith("http://")) {
+                continue;
+            }
+            result.add(new HotItem(title, link));
+            if (result.size() == LIMIT) {
+                break;
+            }
+        }
+        return result;
     }
 
     @Override
@@ -66,11 +83,12 @@ public class GetBaiduNews implements PageProcessor {
      * 提供给外部调用的方法
      */
     public List<HotItem> start() {
+        list.clear();
         Spider.create(this)
-                .addUrl("https://top.baidu.com/board?tab=realtime")
+                .addUrl(BOARD_URL)
                 .thread(1)
                 .run();
 
-        return this.list;
+        return new ArrayList<>(list);
     }
 }
